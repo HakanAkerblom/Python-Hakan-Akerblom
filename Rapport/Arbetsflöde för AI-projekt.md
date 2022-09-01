@@ -35,6 +35,7 @@ Matematiskt ser det ut såhär: $Y = \beta + \beta_1X_1 + ... + \beta_mX_m+ \eps
 Vi bör dock vara vaksamma på att ett linjärt samband kanske inte är den bästa modellen för vårt valda exempel. Företeelser som kan låta sig modellera bra linjärt inom vissa intervall kan avvika kraftigt utanför dessa intervall.
 
 ---
+<br>
 
 ## Källor
 
