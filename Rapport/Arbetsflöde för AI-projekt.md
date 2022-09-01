@@ -7,7 +7,7 @@ När vi vill göra ett AI-projekt är det viktigt att komma ihåg den gamla devi
 - antal rum
 - geografiskt läge (kvantifierbart, exempelvis antal km från stadskärna)
 - storlek
-- Och så vidare
+- och så vidare
 
 Det kan vara en bra idé att analysera datan och titta på saker som median, 10e och 90e percentilen och annat för att få en bild av datans relevans innan man kör igång.
 
