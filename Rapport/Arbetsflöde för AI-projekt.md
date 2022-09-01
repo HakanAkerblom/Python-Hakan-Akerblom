@@ -11,7 +11,9 @@ När vi vill göra ett AI-projekt är det viktigt att komma ihåg den gamla devi
 
 Det kan vara en bra idé att analysera datan och titta på saker som median, 10e och 90e percentilen och annat för att få en bild av datans relevans innan man kör igång.
 
-Det kan också vara en idé att göra några enkla diagram där du analyserarsambandet mellan pris och dina olika variabler för att se att det ser rimligt ut. (Storlek på hus borde exempelvis vara positivt korrelerat med pris)
+Beroende på vilket format filen är i och vilka metadata som finns kan vi behöva göra lite "data-cleaning" innan vi kan sätta igång. Vi vill se till att vi bara läser in den data vi behöver och inget mer. Vi kan också behöva gör en filkonvertering så att vi kan läsa in datan smidigt, exempelvis till en .csv.
+
+Det kan också vara en idé att göra några enkla diagram där du analyserar sambandet mellan pris och dina olika variabler för att se att det ser rimligt ut. (Storlek på hus borde exempelvis vara positivt korrelerat med pris)
 
 ## Skapa modell
 
