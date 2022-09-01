@@ -27,9 +27,9 @@ En linjär regression försöker anpassa en rät linje till en mängd datapunkte
 
 
 <img src= "linreg.jpg" alt="linreg" width="600"/>
-<figcaption align = "left"><b>Fig.1 - Linjär regression med en oberoende variabel</b></figcaption>
+<figcaption align = "left"><b>Fig. 1 - Linjär regression med en oberoende variabel</b></figcaption>
 <br>
-<br>
+
 Matematiskt ser det ut såhär: $Y = \beta + \beta_1X_1 + ... + \beta_mX_m+ \epsilon$. Där $Y$ är priset, $X_i$ är våra olika features, $\beta$ är startvärdet, $\beta_i$ är de olika "vikterna" för våra features och $\epsilon$ är felmarginalen.
 
 Vi bör dock vara vaksamma på att ett linjärt samband kanske inte är den bästa modellen för vårt valda exempel. Företeelser som kan låta sig modellera bra linjärt inom vissa intervall kan avvika kraftigt utanför dessa intervall.
