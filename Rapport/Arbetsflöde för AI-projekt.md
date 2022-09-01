@@ -24,7 +24,7 @@ Denna modell kan hjälpa oss att se trender mellan våra features (storlek, anta
 En linjär regression försöker anpassa en rät linje till en mängd datapunkter där det summerade kvadrerade  avståndet ( i y-led) mellan datapunkterna och linjen ska vara så litet som möjligt. 
 
 
-<img src= "linreg.jpg" alt="linreg" width="400"/>
+<img src= "linreg.jpg" alt="linreg" width="600"/>
 <figcaption align = "center"><b>Fig.1 - Linjär regression med en oberoende variabel</b></figcaption>
 <br>
 
