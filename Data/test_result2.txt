@@ -18,22 +18,3 @@ Ove Karlsten 41
 Sven Erik Karlsson 13
 Sven Erik Lundin 39
 
-['10', 'Ulven', 'Fredrika']
-['13', 'Karlsson', 'Erik', 'Sven']
-['23', 'Håkansson', 'Ida']
-['23', 'Johansson', 'Emil']
-['23', 'Karlsson', 'Hanna']
-['24', 'Håkanson', 'Håkan']
-['25', 'Gustafsson', 'Adam']
-['31', 'Eriksson', 'Erik']
-['31', 'Jonasson', 'Jonas']
-['32', 'Boden', 'Emma']
-['32', 'Bosseson', 'Bose']
-['32', 'Karlsson', 'Karl']
-['39', 'Björnsson', 'Björn']
-['39', 'Lundin', 'Erik', 'Sven']
-['41', 'Ester', 'Ella']
-['41', 'Karlsten', 'Ove']
-['42', 'Johansson', 'Johan']
-['55', 'Bord', 'Gore']
-['65', 'Kallander', 'Jakob']
