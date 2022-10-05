@@ -76,6 +76,8 @@ class Rect(Shape):
     def width(self, value: float):
         if not isinstance(value, (float, int)):
             raise TypeError("Must be int or float")
+        if value <= 0:
+            raise ValueError("Must be positive")
         self._width = value
 
     @property
@@ -86,6 +88,8 @@ class Rect(Shape):
     def height(self, value: float):
         if not isinstance(value, (float, int)):
             raise TypeError("Must be int or float")
+        if value <= 0:
+            raise ValueError("Must be positive")
         self._height = value
 
     @property
@@ -132,6 +136,7 @@ class Rect(Shape):
         ]
         plt.grid()
         plt.plot(xs, ys, color="red")
+        plt.show()
 
         
     def __repr__(self):
@@ -182,4 +187,6 @@ class Circle(Shape):
         else:
             return False
 
-    
+if __name__ == "__main__":
+    a = Rect(1, 1, 10, 10)
+    a.plot()

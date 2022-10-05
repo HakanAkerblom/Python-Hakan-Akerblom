@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./Code-alongs/L15-modules/example1_namespace"
+        "./Code-alongs/L15-modules/example1_namespace",
+        "./Code-alongs/L15-modules/example2__name__"
     ]
 }
