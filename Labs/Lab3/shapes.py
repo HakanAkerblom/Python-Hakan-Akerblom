@@ -27,25 +27,25 @@ class Shape:
             raise TypeError(f"Must be a float or inte, not {type(value)}")
         self._y_cen = value
 
-    def __lt__(self, other: Rect) -> bool:
+    def __lt__(self, other: Shape) -> bool:
         if self.area < other.area:
             return True
         else:
             return False
 
-    def __le__(self, other: Rect) -> bool:
+    def __le__(self, other: Shape) -> bool:
         if self.area <= other.area:
             return True
         else:
             return False
 
-    def __gt__(self, other: Rect) -> bool:
+    def __gt__(self, other: Shape) -> bool:
         if self.area > other.area:
             return True
         else:
             return False
 
-    def __ge__(self, other: Rect) -> bool:
+    def __ge__(self, other: Shape) -> bool:
         if self.area >= other.area:
             return True
         else:
@@ -134,8 +134,10 @@ class Rect(Shape):
             self.y_1,
             self.y_0,
         ]
-        plt.grid()
-        plt.plot(xs, ys, color="red")
+        fig, ax = plt.subplots()
+        ax.grid(True)
+        ax.plot(xs, ys, color="red")
+        ax.set(xlabel = "x", ylabel = "y")
         plt.show()
 
         
@@ -187,6 +189,115 @@ class Circle(Shape):
         else:
             return False
 
+    def plot(self, color = "r"):
+        fig, ax = plt.subplots()
+        circle1 = plt.Circle((self.x_cen, self.y_cen), self.radius, color = color, alpha = 0.5)
+        ax.add_patch(circle1)
+        ax.autoscale()
+        ax.set_aspect(1)
+        plt.show()
+
+class Body:
+    def __init__(self, x_cen: float, y_cen: float, z_cen: float) -> None:
+        self.x_cen = x_cen
+        self.y_cen = y_cen
+        self.z_cen = z_cen
+
+    @property
+    def x_cen(self):
+        return self._x_cen
+
+    @property
+    def y_cen(self):
+        return self._y_cen
+
+    @property
+    def z_cen(self):
+        return self._z_cen
+
+    @x_cen.setter
+    def x_cen(self, value: float):
+        if not isinstance(value, (float, int)):
+            raise TypeError(f"Must be a float or inte, not {type(value)}")
+        self._x_cen = value
+
+    @y_cen.setter
+    def y_cen(self, value: float):
+        if not isinstance(value, (float, int)):
+            raise TypeError(f"Must be a float or inte, not {type(value)}")
+        self._y_cen = value
+
+    @z_cen.setter
+    def z_cen(self, value: float):
+        if not isinstance(value, (float, int)):
+            raise TypeError(f"Must be a float or inte, not {type(value)}")
+        self._z_cen = value
+
+    def __lt__(self, other: Body) -> bool:
+        if self.volume < other.volue:
+            return True
+        else:
+            return False
+
+    def __le__(self, other: Body) -> bool:
+        if self.volume <= other.volume:
+            return True
+        else:
+            return False
+
+    def __gt__(self, other: Body) -> bool:
+        if self.volume > other.volume:
+            return True
+        else:
+            return False
+
+    def __ge__(self, other: Body) -> bool:
+        if self.volume >= other.volume:
+            return True
+        else:
+            return False
+
+class Cube(Body):
+    def __init__(self, x_cen: float, y_cen: float, z_cen: float, side: float) -> None:
+        super().__init__(x_cen, y_cen, z_cen)
+        self.side = side
+
+        @property
+        def side(self):
+            return self._side
+
+        @side.setter
+        def side(self, value):
+            if not isinstance(value, (int, float)):
+                raise TypeError("Must be int or float")
+            elif value <= 0:
+                raise ValueError("Must be positive")
+            else:
+                self._side = value
+
+
+        
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     a = Rect(1, 1, 10, 10)
     a.plot()
+    b = Circle(0, 1, 1)
+    b.plot()
+    c = Circle(1, 2, 1)
+    c.plot("b")
+
+"""
+TODO
+- Fixa så att saker plottas i samma bild
+- Gör Kubklass
+- Gör sphereklass
+
+"""
