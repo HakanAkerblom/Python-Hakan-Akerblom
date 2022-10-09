@@ -4,7 +4,7 @@ import unittest
 
 # we change directory to where this file is
 os.chdir(os.path.dirname(__file__))
-
+print(__file__)
 # we define a path that is up one step
 # in this pathwe have vecot.py and plotter.py and 
 # manual_testing.ipynb
@@ -12,7 +12,6 @@ path_to_geometry_module = os.path.abspath("../")
 
 sys.path.append(path_to_geometry_module)
 print("-"*30)
-print(path_to_geometry_module)
 
 from geometry import *
 
