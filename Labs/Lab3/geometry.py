@@ -56,7 +56,7 @@ class Shape:
 
     def translate(self, x: float, y: float):
         if not isinstance(x, (float, int)) or not isinstance(y, (float, int)):
-            raise TypeError("Must be an int or float")
+            raise TypeError("x and y must be int or float")
         self.x_cen += x
         self.y_cen += y
 
@@ -323,7 +323,6 @@ if __name__ == "__main__":
     print(c1)
     c1.side = 2
     print(c1.is_inside(0, 0, 0))
-    c1.plot()
 
 
 """    a = Rect(1, 1, 10, 10)
