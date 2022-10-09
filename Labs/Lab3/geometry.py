@@ -1,6 +1,9 @@
 from __future__ import annotations
-import matplotlib.pyplot as plt
 import math
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 class Shape:
     def __init__(self, x_cen: float, y_cen: float) -> None:
@@ -63,10 +66,10 @@ class Rect(Shape):
         super().__init__(x_cen, y_cen)
         self.width = width
         self.height = height
-        self.x_0 = self.x_cen - self.width/2
-        self.x_1 = self.x_cen + self.width/2
-        self.y_0 = self.y_cen - self.height/2
-        self.y_1 = self.y_cen + self.height/2
+        self.x_0 = self._x_cen - self._width/2
+        self.x_1 = self._x_cen + self._width/2
+        self.y_0 = self._y_cen - self._height/2
+        self.y_1 = self._y_cen + self._height/2
 
     @property
     def width(self):
@@ -261,19 +264,71 @@ class Cube(Body):
     def __init__(self, x_cen: float, y_cen: float, z_cen: float, side: float) -> None:
         super().__init__(x_cen, y_cen, z_cen)
         self.side = side
+        self.x_0 = self._x_cen - self._side/2
+        self.x_1 = self._x_cen + self._side/2
+        self.y_0 = self._y_cen - self._side/2
+        self.y_1 = self._y_cen + self._side/2
+        self.z_0 = self._z_cen - self._side/2
+        self.z_1 = self._z_cen + self._side/2
 
-        @property
-        def side(self):
-            return self._side
+    @property
+    def side(self):
+        return self._side
 
-        @side.setter
-        def side(self, value):
-            if not isinstance(value, (int, float)):
-                raise TypeError("Must be int or float")
-            elif value <= 0:
-                raise ValueError("Must be positive")
-            else:
-                self._side = value
+    @side.setter
+    def side(self, value):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Must be int or float")
+        elif value <= 0:
+            raise ValueError("Must be positive")
+        else:
+            self._side = value
+        
+    @property
+    def surface_area(self):
+        return 6*(self._side**2)
+
+    @property
+    def volume(self):
+        return self._side**3
+
+    def is_inside(self, x: float, y: float, z:float ) -> bool:
+        if not isinstance(x, (float, int)) or not isinstance(y, (float, int)) or not isinstance(z, (float, int)):
+            raise TypeError("x, y and z must be floats or ints")       
+        elif self.x_0 <= x <= self.x_1 and self.y_0 <= y <= self.y_1 and self.z_0 <= z <= self.z_1:
+            return True
+        else:
+            return False
+
+    def __eq__(self, other: Cube):
+        if self._side == other._side:
+            return True
+        else:
+            return False
+
+    def plot(self): # tagen från https://www.geeksforgeeks.org/how-to-draw-3d-cube-using-matplotlib-in-python/
+        # Create axis
+        axes = [5, 5, 5]
+        
+        # Create Data
+        data = np.ones(axes, dtype=np.bool)
+
+        # Control Transparency
+        alpha = 0.9
+        
+        # Control colour
+        colors = np.empty(axes + [4], dtype=np.float32)
+        
+        colors[:] = [0, 0.1, 0.5, alpha]
+        
+        # Plot figure
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        
+        # Voxels is used to customizations of the
+        # sizes, positions and colors.
+        ax.voxels(data, facecolors=colors)
+        plt.show()
 
 
         
@@ -287,12 +342,19 @@ class Cube(Body):
 
 
 if __name__ == "__main__":
-    a = Rect(1, 1, 10, 10)
+    c1 = Cube(0, 0, 0, 1)
+    print(c1)
+    c1.side = 2
+    print(c1.is_inside(0, 0, 0))
+    c1.plot()
+
+
+"""    a = Rect(1, 1, 10, 10)
     a.plot()
     b = Circle(0, 1, 1)
     b.plot()
     c = Circle(1, 2, 1)
-    c.plot("b")
+    c.plot("b") """
 
 """
 TODO
