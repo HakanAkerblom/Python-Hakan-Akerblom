@@ -164,6 +164,8 @@ class Circle(Shape):
     def radius(self, value: float):
         if not isinstance(value, (float, int)):
             raise TypeError("Must be int or float")
+        if value <= 0:
+            raise ValueError("Must be positive")
         self._radius = value
 
     @property
@@ -322,7 +324,7 @@ if __name__ == "__main__":
     c1 = Cube(0, 0, 0, 1)
     print(c1)
     c1.side = 2
-    print(c1.is_inside(0, 0, 0))
+    print(c1.is_inside(0, -0.4, 0.5))
 
 
 """    a = Rect(1, 1, 10, 10)
@@ -337,5 +339,7 @@ TODO
 - Fixa så att saker plottas i samma bild
 - Gör Kubklass
 - Gör sphereklass
+- unittesting på kub och sphere
+- Ta bort onödiga imports om 3d-plotting inte ska användas
 
 """

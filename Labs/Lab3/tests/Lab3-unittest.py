@@ -27,7 +27,7 @@ class TestRect(unittest.TestCase):
     def create_rectangle(self) -> Rect:
         return Rect(self.x_cen, self.y_cen, self.width, self.height)
         
-    def test_create_rectangle(self):
+    def test_create_rectangle_0(self):
         r1 = self.create_rectangle()
         self.assertEqual((r1.x_cen, r1.y_cen, r1.width, r1.height),(self.x_cen, self.y_cen, self.width, self.height))
     
@@ -138,6 +138,99 @@ class TestRect(unittest.TestCase):
         self.assertFalse(r1.is_square())
 
     #---------tests of circle--------
+
+class TestCircle(unittest.TestCase):
+    def setUp(self):
+        self.x_cen = 1
+        self.y_cen = 1
+        self.radius = 1
+
+    def create_circle(self) -> Circle:
+        return Circle(self.x_cen, self.y_cen, self.radius)
+        
+    def test_create_circle_0(self):
+        c1 = self.create_circle()
+        self.assertEqual((c1.x_cen, c1.y_cen, c1.radius),(self.x_cen, self.y_cen, self.radius))
+    
+    def test_create_circle_1(self):
+        with self.assertRaises(TypeError):
+            c1 = Circle()
+
+    def test_create_circle_2(self):
+        with self.assertRaises(ValueError):
+            c1 = Circle(1, 1, -10)
+
+    def test_create_circle_3(self):
+        with self.assertRaises(ValueError):
+            c1 = Circle(1, 1, 0)
+
+    def test_create_circle_4(self):
+        with self.assertRaises(TypeError):
+            c1 = Circle(1, 1, "hej")
+
+    def test_circle_comparison_1(self):
+        c1 = Circle(0, 0, 1)
+        c2 = Circle(1, 1, 1)
+        self.assertTrue(c1 == c2)
+
+    def test_circle_comparison_2(self):
+        c1 = Circle(0, 0, 1)
+        c2 = Circle(1, 1, 1)
+        self.assertFalse(c1 > c2)
+
+    def test_circle_comparison_3(self):
+        c1 = Circle(0, 0, 1)
+        c2 = Circle(1, 1, 1)
+        self.assertFalse(c1 < c2)
+
+    def test_circle_comparison_4(self):
+        c1 = Circle(0, 0, 1)
+        c2 = Circle(1, 1, 3)
+        self.assertTrue(c1 < c2)
+
+    def test_circle_translate_1(self):
+        c1 = Circle(0, 0, 1)
+        c2 = Circle(3, 4, 1)
+        c1.translate(3, 4)
+        self.assertEqual((c1.x_cen, c1.y_cen), (c2.x_cen, c2.y_cen))
+
+    def test_circle_translate_2(self):
+        c1 = Circle(0, 0, 1)
+        c2 = Circle(-3, -2, 1)
+        c1.translate(-3, -2)
+        self.assertEqual((c1.x_cen, c1.y_cen), (c2.x_cen, c2.y_cen))
+
+    def test_circle_is_inside_1(self):
+        c1 = Circle(0, 0, 1)
+        x1 = 0.4
+        y1 = -0.3
+        self.assertTrue(c1.is_inside(x1, y1))
+        
+    def test_circle_is_inside_2(self):
+        c1 = Circle(0, 0, 1)
+        x1 = 1
+        y1 = 0
+        self.assertTrue(c1.is_inside(x1, y1))
+
+    def test_circle_is_inside_3(self):
+        c1 = Circle(0, 0, 1)
+        x1 = 0
+        y1 = 1.1
+        self.assertFalse(c1.is_inside(x1, y1))
+
+    def test_circle_is_unit_circle_1(self):
+        c1 = Circle(0, 0, 1)
+        self.assertTrue(c1.is_unit_circle())
+
+    def test_circle_is_unit_circle_2(self):
+        c1 = Circle(0, 1, 1)
+        self.assertFalse(c1.is_unit_circle())
+
+    def test_circle_is_unit_circle_3(self):
+        c1 = Circle(0, 0, 2)
+        self.assertFalse(c1.is_unit_circle())
+
+
 
 
     #-----------tests of cube
