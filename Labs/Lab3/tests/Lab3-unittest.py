@@ -6,16 +6,17 @@ import unittest
 os.chdir(os.path.dirname(__file__))
 print(__file__)
 # we define a path that is up one step
-# in this pathwe have vecot.py and plotter.py and 
+# in this pathwe have vecot.py and plotter.py and
 # manual_testing.ipynb
 path_to_geometry_module = os.path.abspath("../")
 
 sys.path.append(path_to_geometry_module)
-print("-"*30)
+print("-" * 30)
 
 from geometry import *
 
-    #----tests of Rect--------
+# ----tests of Rect--------
+
 
 class TestRect(unittest.TestCase):
     def setUp(self):
@@ -26,11 +27,14 @@ class TestRect(unittest.TestCase):
 
     def create_rectangle(self) -> Rect:
         return Rect(self.x_cen, self.y_cen, self.width, self.height)
-        
+
     def test_create_rectangle_0(self):
         r1 = self.create_rectangle()
-        self.assertEqual((r1.x_cen, r1.y_cen, r1.width, r1.height),(self.x_cen, self.y_cen, self.width, self.height))
-    
+        self.assertEqual(
+            (r1.x_cen, r1.y_cen, r1.width, r1.height),
+            (self.x_cen, self.y_cen, self.width, self.height),
+        )
+
     def test_create_rectangle_1(self):
         with self.assertRaises(TypeError):
             r1 = Rect()
@@ -116,7 +120,7 @@ class TestRect(unittest.TestCase):
         x1 = 0.4
         y1 = -0.3
         self.assertTrue(r1.is_inside(x1, y1))
-        
+
     def test_rect_is_inside_2(self):
         r1 = Rect(0, 0, 1, 1)
         x1 = 0.5
@@ -137,7 +141,8 @@ class TestRect(unittest.TestCase):
         r1 = Rect(-12, 45.4, 4, 5)
         self.assertFalse(r1.is_square())
 
-    #---------tests of circle--------
+    # ---------tests of Circle--------
+
 
 class TestCircle(unittest.TestCase):
     def setUp(self):
@@ -147,11 +152,13 @@ class TestCircle(unittest.TestCase):
 
     def create_circle(self) -> Circle:
         return Circle(self.x_cen, self.y_cen, self.radius)
-        
+
     def test_create_circle_0(self):
         c1 = self.create_circle()
-        self.assertEqual((c1.x_cen, c1.y_cen, c1.radius),(self.x_cen, self.y_cen, self.radius))
-    
+        self.assertEqual(
+            (c1.x_cen, c1.y_cen, c1.radius), (self.x_cen, self.y_cen, self.radius)
+        )
+
     def test_create_circle_1(self):
         with self.assertRaises(TypeError):
             c1 = Circle()
@@ -205,7 +212,7 @@ class TestCircle(unittest.TestCase):
         x1 = 0.4
         y1 = -0.3
         self.assertTrue(c1.is_inside(x1, y1))
-        
+
     def test_circle_is_inside_2(self):
         c1 = Circle(0, 0, 1)
         x1 = 1
@@ -230,10 +237,8 @@ class TestCircle(unittest.TestCase):
         c1 = Circle(0, 0, 2)
         self.assertFalse(c1.is_unit_circle())
 
+# -----------tests of Cube---------------
 
-
-
-    #-----------tests of cube
 
 class TestCube(unittest.TestCase):
     def setUp(self):
@@ -247,7 +252,10 @@ class TestCube(unittest.TestCase):
 
     def test_create_cube_1(self):
         c1 = self.create_cube()
-        self.assertEqual((c1.x_cen, c1.y_cen, c1.z_cen, c1.side), (self.x_cen, self.y_cen, self.z_cen, self.side))
+        self.assertEqual(
+            (c1.x_cen, c1.y_cen, c1.z_cen, c1.side),
+            (self.x_cen, self.y_cen, self.z_cen, self.side),
+        )
 
     def test_create_cube_2(self):
         with self.assertRaises(ValueError):
@@ -257,9 +265,13 @@ class TestCube(unittest.TestCase):
         with self.assertRaises(ValueError):
             c1 = Cube(1, 1, 1, 0)
 
-    def test_create_cube_3(self):
+    def test_create_cube_4(self):
         with self.assertRaises(TypeError):
             c1 = Cube(1, 1, 1, "asdf")
+
+    def test_create_cube_5(self):
+        with self.assertRaises(TypeError):
+            c1 = Cube(1, 1, "hej", 1)
 
     def test_cube_is_inside_1(self):
         c1 = Cube(0, 0, 0, 2)
@@ -282,11 +294,64 @@ class TestCube(unittest.TestCase):
             y1 = -2
             z1 = "hej"
             c1.is_inside(x1, y1, z1)
-    
+
+# -----------tests of Sphere---------------
+
+class TestSphere(unittest.TestCase):
+    def setUp(self):
+        self.x_cen = 0
+        self.y_cen = 0
+        self.z_cen = 0
+        self.radius = 1
+
+    def create_sphere(self) -> Sphere:
+        return Sphere(self.x_cen, self.y_cen, self.z_cen, self.radius)
+
+    def test_create_sphere_1(self):
+        s1 = self.create_sphere()
+        self.assertEqual(
+            (s1.x_cen, s1.y_cen, s1.z_cen, s1.radius),
+            (self.x_cen, self.y_cen, self.z_cen, self.radius),
+        )
+
+    def test_create_sphere_2(self):
+        with self.assertRaises(ValueError):
+            s1 = Sphere(1, 1, 1, -2)
+
+    def test_create_sphere_3(self):
+        with self.assertRaises(ValueError):
+            s1 = Sphere(1, 1, 1, 0)
+
+    def test_create_sphere_4(self):
+        with self.assertRaises(TypeError):
+            s1 = Sphere(1, 1, 1, "asdf")
+
+    def test_create_sphere_5(self):
+        with self.assertRaises(TypeError):
+            s1 = Sphere(1, 1, "hej", 1)
+
+    def test_sphere_is_inside_1(self):
+        s1 = Sphere(0, 0, 0, 2)
+        x1 = 1
+        y1 = -1
+        z1 = 1
+        self.assertTrue(s1.is_inside(x1, y1, z1))
+
+    def test_sphere_is_inside_2(self):
+        s1 = Sphere(0, 0, 0, 2)
+        x1 = 1
+        y1 = -2
+        z1 = 0
+        self.assertFalse(s1.is_inside(x1, y1, z1))
+
+    def test_sphere_is_inside_3(self):
+        s1 = Sphere(0, 0, 0, 2)
+        with self.assertRaises(TypeError):
+            x1 = 1
+            y1 = -2
+            z1 = "hej"
+            s1.is_inside(x1, y1, z1)
+
 
 if __name__ == "__main__":
     unittest.main()
-
-
-
-
