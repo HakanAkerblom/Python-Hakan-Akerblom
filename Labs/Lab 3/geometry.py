@@ -169,10 +169,12 @@ class Rectangle(Shape):
 
     @property
     def area(self):
+        """Calculates area of rectangle"""
         return self.height * self.width
 
     @property
     def perimeter(self):
+        """Calculates perimeter of rectangle"""
         return self.height * 2 + self.width * 2
 
     # ----- eq -----
@@ -236,10 +238,12 @@ class Circle(Shape):
 
     @property
     def area(self):
+        """calculates area of circle"""
         return math.pi * self.radius**2
 
     @property
     def circumference(self):
+        """Calculates circumference of circle"""
         return math.pi * self.radius * 2
 
     # ----- eq -----
@@ -395,10 +399,12 @@ class Cube(Body):
 
     @property
     def surface_area(self):
+        """Calculates surface area of cube"""
         return 6 * (self._side**2)
 
     @property
     def volume(self):
+        """Calculates volume of cube"""
         return self._side**3
 
     # ----- eq -----
@@ -461,10 +467,12 @@ class Sphere(Body):
 
     @property
     def surface_area(self):
+        """Calculates surface area of sphere"""
         return 4 * math.pi * self._radius**2
 
     @property
     def volume(self):
+        """Calculates volume of sphere"""
         return (4 / 3) * math.pi * self._radius**3
 
     # ----- eq -----
