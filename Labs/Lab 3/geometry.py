@@ -5,13 +5,14 @@ import matplotlib.patches as patches
 from abc import abstractmethod, ABC
 
 # --------------------------------------------------------------------
-# Geometry Class 
+# Geometry Class
 # --------------------------------------------------------------------
 class Geometry:
-    """Parent class to Shape and Body. Two required paramters: x_cen and y_cen for position. Contains error handling for all childclasses"""
-    def __init__(self, x_cen: float, y_cen: float) -> None:
-        self.x_cen = x_cen
-        self.y_cen = y_cen
+    """Abstract superclass to Shape and Body. Two required paramters: x and y for position. Contains error handling for all subclasses"""
+
+    def __init__(self, x: float = 0, y: float = 0) -> None:
+        self.x = x
+        self.y = y
 
     # ----- Abstract method -----
     @abstractmethod
@@ -20,20 +21,20 @@ class Geometry:
 
     # ----- Properties -----
     @property
-    def x_cen(self):
-        return self._x_cen
+    def x(self):
+        return self._x
 
     @property
-    def y_cen(self):
-        return self._y_cen
+    def y(self):
+        return self._y
 
-    @x_cen.setter
-    def x_cen(self, value: float):
-        self._x_cen = self.check_coordinate(value)
+    @x.setter
+    def x(self, value: float):
+        self._x = self.check_coordinate(value)
 
-    @y_cen.setter
-    def y_cen(self, value: float):
-        self._y_cen = self.check_coordinate(value)
+    @y.setter
+    def y(self, value: float):
+        self._y = self.check_coordinate(value)
 
     # ----- Error handling ----- (structure inspired by Andreas)
     def check_coordinate(self, value: float):
@@ -42,7 +43,7 @@ class Geometry:
             raise TypeError(f"Must be a float or inte, not {type(value).__name__}")
         else:
             return value
-    
+
     def check_measurement(self, value: float):
         """Error handling for measurements"""
         if not isinstance(value, (float, int)):
@@ -52,13 +53,15 @@ class Geometry:
         else:
             return value
 
+
 # --------------------------------------------------------------------
-# Shape Class 
+# Shape Class
 # --------------------------------------------------------------------
 class Shape(Geometry):
-    """Parent class to Rectangle and Circle. Adds comparisons measuring area"""
-    def __init__(self, x_cen: float, y_cen: float) -> None:
-        super().__init__(x_cen, y_cen)
+    """Abstract superclass to Rectangle and Circle. Adds comparisons measuring area"""
+
+    def __init__(self, x: float = 0, y: float = 0) -> None:
+        super().__init__(x, y)
 
     # ----- Abstract method -----
     @abstractmethod
@@ -94,28 +97,55 @@ class Shape(Geometry):
         else:
             return False
 
-# ----- translate -----
+    # ----- translate -----
     def translate(self, x: float, y: float):
         """Moves a shape in positive x- and y-direction"""
         if not isinstance(x, (float, int)) or not isinstance(y, (float, int)):
             raise TypeError("x and y must be int or float")
-        self.x_cen += x
-        self.y_cen += y
+        self.x += x
+        self.y += y
+        if type(self).__name__ == "Rectangle":
+            self.x_0 = self._x - self._width / 2
+            self.x_1 = self._x + self._width / 2
+            self.y_0 = self._y - self._height / 2
+            self.y_1 = self._y + self._height / 2
+
+    def plot_translation(
+        self, x: float = 0, y: float = 0
+    ) -> None:  # copied from https://github.com/Andreas-Svensson/Python-Andreas-Svensson/blob/main/Laborations/Geometry%20OOP/shapes.py
+        """Translate shape and plot it visually"""
+        patch_list = []  # storing return values (patches)
+
+        patch_list.append(self.plot())  # create patch of self in previous position
+        # styling previous position to low alpha and black dotted outlines:
+        patch_list[0].set_alpha(0.3)
+        patch_list[0].set_linestyle("--")
+        patch_list[0].set_edgecolor("black")
+
+        self.translate(x, y)  # perform actual translation
+
+        patch_list.append(self.plot())  # create patch of self in current position
+
+        return patch_list  # return list containing patches of self in old and new positions
+
 
 # --------------------------------------------------------------------
-# Rectangle Class 
+# Rectangle Class
 # --------------------------------------------------------------------
 class Rectangle(Shape):
     """Class to create a rectangle. Adds Width and height giving size."""
-    def __init__(self, x_cen: float, y_cen: float, width: float, height: float) -> None:
-        super().__init__(x_cen, y_cen)
+
+    def __init__(
+        self, x: float = 0, y: float = 0, width: float = 1, height: float = 1
+    ) -> None:
+        super().__init__(x, y)
         self.width = width
         self.height = height
         """x_0 and x_1: min and max x-value, y_0 and y_1: min and max y-value."""
-        self.x_0 = self._x_cen - self._width / 2
-        self.x_1 = self._x_cen + self._width / 2
-        self.y_0 = self._y_cen - self._height / 2
-        self.y_1 = self._y_cen + self._height / 2
+        self.x_0 = self._x - self._width / 2
+        self.x_1 = self._x + self._width / 2
+        self.y_0 = self._y - self._height / 2
+        self.y_1 = self._y + self._height / 2
 
     # ----- properties -----
     @property
@@ -139,13 +169,15 @@ class Rectangle(Shape):
         return self.height * self.width
 
     @property
-    def circ(self):
+    def perimeter(self):
         return self.height * 2 + self.width * 2
 
     # ----- eq -----
-    def __eq__(self, other: Rectangle):
+    def __eq__(self, other: Rectangle) -> bool:
         """Checks if two rectangles have the same measuements. Position is disregarded"""
-        if self.width == other.width and self.height == other.height:
+        if type(self).__name__ != type(other).__name__:
+            return False
+        elif self.width == other.width and self.height == other.height:
             return True
         else:
             return False
@@ -165,25 +197,28 @@ class Rectangle(Shape):
         else:
             return False
 
-    def plot(self) -> patches.Patch:
+    def plot(
+        self,
+    ) -> patches.Patch:  # copied from https://github.com/Andreas-Svensson/Python-Andreas-Svensson/blob/main/Laborations/Geometry%20OOP/shapes.py
         """Returns patch containing rectangle"""
-        return patches.Rectangleangle((self.x_0, self.y_0), width = {self._width}, height = {self._height})
+        return patches.Rectangle((self.x_0, self.y_0), self._width, self._height)
 
-    
-
+    # ----- __str__ and __repr__ -----
     def __repr__(self):
-        return f"{self.width=}, {self.height=}, position: ({self.x_cen}, {self.y_cen})"
+        return f"Rectangle with {self.x=}, {self.y=}, {self.width=} and {self.height=}"
 
     def __str__(self):
-        return f"{self.width=}, {self.height=}, position: ({self.x_cen}, {self.y_cen})"
+        return f"Rectangle with width: {self.width}, height: {self.height}, position: ({self.x}, {self.y}), area: {self.area} and perimeter: {self.perimeter}."
+
 
 # --------------------------------------------------------------------
-# Circle Class 
+# Circle Class
 # --------------------------------------------------------------------
 class Circle(Shape):
     """Class to create a circle"""
-    def __init__(self, x_cen: float, y_cen: float, radius: float) -> None:
-        super().__init__(x_cen, y_cen)
+
+    def __init__(self, x: float = 0, y: float = 0, radius: float = 1) -> None:
+        super().__init__(x, y)
         self.radius = radius
 
     # ----- Properties -----
@@ -200,12 +235,14 @@ class Circle(Shape):
         return math.pi * self.radius**2
 
     @property
-    def circ(self):
+    def circumference(self):
         return math.pi * self.radius * 2
 
     # ----- eq -----
-    def __eq__(self, other: Circle):
+    def __eq__(self, other: Circle) -> bool:
         """Checks if the radius of two circles are the same"""
+        if type(self).__name__ != type(other).__name__:
+            return False
         if self.radius == other.radius:
             return True
         else:
@@ -214,30 +251,43 @@ class Circle(Shape):
     # ----- Other methods -----
     def is_inside(self, x: float, y: float):
         """Checks if a point is inside or on the circle"""
-        if math.sqrt((x - self.x_cen) ** 2 + (y - self.y_cen) ** 2) <= self.radius:
+        if math.sqrt((x - self.x) ** 2 + (y - self.y) ** 2) <= self.radius:
             return True
         else:
             return False
 
     def is_unit_circle(self):
         """Checks if circle has radius one and is centered in the origin"""
-        if self.radius == 1 and self.x_cen == 0 and self.y_cen == 0:
+        if self.radius == 1 and self.x == 0 and self.y == 0:
             return True
         else:
             return False
 
-    def plot(self) -> patches.Patch:
+    def plot(
+        self,
+    ) -> patches.Patch:  # copied from https://github.com/Andreas-Svensson/Python-Andreas-Svensson/blob/main/Laborations/Geometry%20OOP/shapes.py
         """Returns patch containing circle"""
-        return patches.Circle((self._x_cen, self._y_cen), self._radius)
+        return patches.Circle((self._x, self._y), self._radius)
+
+    # ----- __str__ and __repr__ -----
+    def __repr__(self):
+        return f"Circle with {self.x=}, {self.y=} and {self.radius=}"
+
+    def __str__(self):
+        return f"Circle with radius: {self.radius}, position: ({self.x}, {self.y}), area: {self.area} and circumference: {self.circumference}."
+
+
 
 # --------------------------------------------------------------------
-# Body Class 
+# Body Class
 # --------------------------------------------------------------------
 class Body(Geometry):
-    """Superclass to Cube and Sphere, adds z_cen for position in the third dimensions. Adds comparisons measuring volume."""
-    def __init__(self, x_cen: float, y_cen: float, z_cen: float) -> None:
-        super().__init__(x_cen, y_cen)
-        self.z_cen = z_cen
+    """Abstract Superclass to Cube and Sphere, adds z for position in the third dimensions.
+    Adds comparisons measuring volume."""
+
+    def __init__(self, x: float, y: float, z: float) -> None:
+        super().__init__(x, y)
+        self.z = z
 
     # ----- Abstract method -----
     @abstractmethod
@@ -246,28 +296,28 @@ class Body(Geometry):
 
     # ----- Properties -----
     @property
-    def x_cen(self):
-        return self._x_cen
+    def x(self):
+        return self._x
 
     @property
-    def y_cen(self):
-        return self._y_cen
+    def y(self):
+        return self._y
 
     @property
-    def z_cen(self):
-        return self._z_cen
+    def z(self):
+        return self._z
 
-    @x_cen.setter
-    def x_cen(self, value: float):
-        self._x_cen = self.check_coordinate(value)
+    @x.setter
+    def x(self, value: float):
+        self._x = self.check_coordinate(value)
 
-    @y_cen.setter
-    def y_cen(self, value: float):
-        self._y_cen = self.check_coordinate(value)
+    @y.setter
+    def y(self, value: float):
+        self._y = self.check_coordinate(value)
 
-    @z_cen.setter
-    def z_cen(self, value: float):
-        self._z_cen = self.check_coordinate(value)
+    @z.setter
+    def z(self, value: float):
+        self._z = self.check_coordinate(value)
 
     # ----- Comparisons -----
     def __lt__(self, other: Body) -> bool:
@@ -294,20 +344,35 @@ class Body(Geometry):
         else:
             return False
 
+    def translate(self, x: float, y: float, z: float):
+        if (
+            not isinstance(x, (float, int))
+            or not isinstance(y, (float, int))
+            or not isinstance(z, (float, int))
+        ):
+            raise TypeError("x and y must be int or float")
+        self._x += x
+        self._y += y
+        self._z += z
+
+
 # --------------------------------------------------------------------
-# Cube Class 
+# Cube Class
 # --------------------------------------------------------------------
 class Cube(Body):
     """Class to make a Cube. Adds side-measurment"""
-    def __init__(self, x_cen: float, y_cen: float, z_cen: float, side: float) -> None:
-        super().__init__(x_cen, y_cen, z_cen)
+
+    def __init__(
+        self, x: float = 0, y: float = 0, z: float = 0, side: float = 1
+    ) -> None:
+        super().__init__(x, y, z)
         self.side = side
-        self.x_0 = self._x_cen - self._side / 2
-        self.x_1 = self._x_cen + self._side / 2
-        self.y_0 = self._y_cen - self._side / 2
-        self.y_1 = self._y_cen + self._side / 2
-        self.z_0 = self._z_cen - self._side / 2
-        self.z_1 = self._z_cen + self._side / 2
+        self.x_0 = self._x - self._side / 2
+        self.x_1 = self._x + self._side / 2
+        self.y_0 = self._y - self._side / 2
+        self.y_1 = self._y + self._side / 2
+        self.z_0 = self._z - self._side / 2
+        self.z_1 = self._z + self._side / 2
 
     # ----- Properties -----
     @property
@@ -316,7 +381,7 @@ class Cube(Body):
 
     @side.setter
     def side(self, value):
-            self._side = self.check_measurement(value)
+        self._side = self.check_measurement(value)
 
     @property
     def surface_area(self):
@@ -327,8 +392,10 @@ class Cube(Body):
         return self._side**3
 
     # ----- eq -----
-    def __eq__(self, other: Cube):
+    def __eq__(self, other: Cube) -> bool:
         """Checks if two cubes have the same sidelength"""
+        if type(self).__name__ != type(other).__name__:
+            return False
         if self._side == other._side:
             return True
         else:
@@ -352,13 +419,25 @@ class Cube(Body):
         else:
             return False
 
+    # ----- __str__ and __repr__ -----
+    def __repr__(self):
+        return f"Cube with {self.x=}, {self.y=}, {self.z=} and {self.side=}"
+
+    def __str__(self):
+        return f"Cube with side: {self.side}, position: ({self.x}, {self.y}, {self.z}), surface area: {self.surface_area} and volume {self.volume}."
+
+
+
 # --------------------------------------------------------------------
-# Sphere Class 
+# Sphere Class
 # --------------------------------------------------------------------
 class Sphere(Body):
-    """Class to create a Sphere. Adds radius-measurment"""
-    def __init__(self, x_cen: float, y_cen: float, z_cen: float, radius: float) -> None:
-        super().__init__(x_cen, y_cen, z_cen)
+    """Class to create a Sphere. Adds radius-measurement"""
+
+    def __init__(
+        self, x: float = 0, y: float = 0, z: float = 0, radius: float = 1
+    ) -> None:
+        super().__init__(x, y, z)
         self.radius = radius
 
     # ----- Properties -----
@@ -368,7 +447,7 @@ class Sphere(Body):
 
     @radius.setter
     def radius(self, value):
-            self._radius = self.check_measurement(value)
+        self._radius = self.check_measurement(value)
 
     @property
     def surface_area(self):
@@ -380,37 +459,46 @@ class Sphere(Body):
 
     # ----- eq -----
     def __eq__(self, other: Sphere) -> bool:
+        if type(self).__name__ != type(other).__name__:
+            return False
         if (
             self._radius == other._radius
-            and self._x_cen == other._x_cen
-            and self.y_cen == other._y_cen
+            and self._x == other._x
+            and self._y == other._y
+            and self._z == other._z
         ):
             return True
         else:
             return False
-    
+
     # ----- other method -----
     def is_inside(self, x: float, y: float, z: float) -> bool:
         """Checks if a point is inside or on the circle"""
-        if math.sqrt((x - self.x_cen) ** 2 + (y - self.y_cen) ** 2 + (z - self.z_cen) ** 2) <= self.radius:
+        if (
+            math.sqrt((x - self.x) ** 2 + (y - self.y) ** 2 + (z - self.z) ** 2)
+            <= self.radius
+        ):
             return True
         else:
             return False
 
-def plot(*args):
-    pass
+    # ----- __str__ and __repr__ -----
+    def __repr__(self):
+        return f"Sphere with {self.x=}, {self.y=}, {self.z=} and {self.radius=}"
+
+    def __str__(self):
+        return f"Sphere with radius: {self.radius}, position: ({self.x}, {self.y}, {self.z}), surface area: {self.surface_area} and volume {self.volume}."
 
 
 
 if __name__ == "__main__":
-    pass
-
-
+    r1 = Rectangle(1, 2, 3, 4)
+    print(r1)
+    print(r1.__repr__)
 
 
 """
 TODO
-- Fixa så att saker plottas i samma bild
 - lägg till plot på translate och is_inside?
 
 """
