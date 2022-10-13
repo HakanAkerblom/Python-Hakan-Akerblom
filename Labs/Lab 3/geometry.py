@@ -11,6 +11,7 @@ class Geometry:
     """Abstract superclass to Shape and Body. Two required paramters: x and y for position. Contains error handling for all subclasses"""
 
     def __init__(self, x: float = 0, y: float = 0) -> None:
+        """Init method for Geometry class. Two required parameters: x- and y-coordinate"""
         self.x = x
         self.y = y
 
@@ -61,6 +62,7 @@ class Shape(Geometry):
     """Abstract superclass to Rectangle and Circle. Adds comparisons measuring area"""
 
     def __init__(self, x: float = 0, y: float = 0) -> None:
+        """Init method for Shape class"""
         super().__init__(x, y)
 
     # ----- Abstract method -----
@@ -138,6 +140,7 @@ class Rectangle(Shape):
     def __init__(
         self, x: float = 0, y: float = 0, width: float = 1, height: float = 1
     ) -> None:
+        """Init method for Rectangle class. Adds two required paramters: width and height"""
         super().__init__(x, y)
         self.width = width
         self.height = height
@@ -218,6 +221,7 @@ class Circle(Shape):
     """Class to create a circle"""
 
     def __init__(self, x: float = 0, y: float = 0, radius: float = 1) -> None:
+        """Init method for Circle class. Adds one required parameter: radius."""
         super().__init__(x, y)
         self.radius = radius
 
@@ -277,7 +281,6 @@ class Circle(Shape):
         return f"Circle with radius: {self.radius}, position: ({self.x}, {self.y}), area: {self.area} and circumference: {self.circumference}."
 
 
-
 # --------------------------------------------------------------------
 # Body Class
 # --------------------------------------------------------------------
@@ -286,6 +289,7 @@ class Body(Geometry):
     Adds comparisons measuring volume."""
 
     def __init__(self, x: float, y: float, z: float) -> None:
+        """Init method for Body class. Adds one required parameter: z-coordinate."""
         super().__init__(x, y)
         self.z = z
 
@@ -321,30 +325,35 @@ class Body(Geometry):
 
     # ----- Comparisons -----
     def __lt__(self, other: Body) -> bool:
+        """Compares volumes of two bodies"""
         if self.volume < other.volume:
             return True
         else:
             return False
 
     def __le__(self, other: Body) -> bool:
+        """Compares volumes of two bodies"""
         if self.volume <= other.volume:
             return True
         else:
             return False
 
     def __gt__(self, other: Body) -> bool:
+        """Compares volumes of two bodies"""
         if self.volume > other.volume:
             return True
         else:
             return False
 
     def __ge__(self, other: Body) -> bool:
+        """Compares volumes of two bodies"""
         if self.volume >= other.volume:
             return True
         else:
             return False
 
     def translate(self, x: float, y: float, z: float):
+        """Moves a Body in space"""
         if (
             not isinstance(x, (float, int))
             or not isinstance(y, (float, int))
@@ -365,6 +374,7 @@ class Cube(Body):
     def __init__(
         self, x: float = 0, y: float = 0, z: float = 0, side: float = 1
     ) -> None:
+        """Init method for Cube class. Adds one required parameter: side."""
         super().__init__(x, y, z)
         self.side = side
         self.x_0 = self._x - self._side / 2
@@ -427,7 +437,6 @@ class Cube(Body):
         return f"Cube with side: {self.side}, position: ({self.x}, {self.y}, {self.z}), surface area: {self.surface_area} and volume {self.volume}."
 
 
-
 # --------------------------------------------------------------------
 # Sphere Class
 # --------------------------------------------------------------------
@@ -437,6 +446,7 @@ class Sphere(Body):
     def __init__(
         self, x: float = 0, y: float = 0, z: float = 0, radius: float = 1
     ) -> None:
+        """Init method for Sphere class. Adds one required parameter: radius."""
         super().__init__(x, y, z)
         self.radius = radius
 
@@ -459,14 +469,10 @@ class Sphere(Body):
 
     # ----- eq -----
     def __eq__(self, other: Sphere) -> bool:
+        """Checks if two spheres has the same radius"""
         if type(self).__name__ != type(other).__name__:
             return False
-        if (
-            self._radius == other._radius
-            and self._x == other._x
-            and self._y == other._y
-            and self._z == other._z
-        ):
+        if self._radius == other._radius:
             return True
         else:
             return False
@@ -490,11 +496,17 @@ class Sphere(Body):
         return f"Sphere with radius: {self.radius}, position: ({self.x}, {self.y}, {self.z}), surface area: {self.surface_area} and volume {self.volume}."
 
 
-
 if __name__ == "__main__":
     r1 = Rectangle(1, 2, 3, 4)
     print(r1)
     print(r1.__repr__)
+
+    for class_type in Circle, Rectangle, Sphere, Cube:
+        for name, value in class_type.__dict__.items():
+            if value.__doc__ == None:
+                print(
+                    f"{class_type,__name__} class, {name} method is missing a docstring"
+                )
 
 
 """
