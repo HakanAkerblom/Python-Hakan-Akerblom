@@ -1,0 +1,25 @@
+from __future__ import annotations
+
+def get_coordinate(treasure, coordinate):
+    return coordinate
+
+convert_coordinate(coordinate):
+    coordinate0 = coordinate[0]
+    coordinate1 = coordinate[1]
+    return tuple(coordinate0, coordinate1)
+
+def compare_records((treasure: string , coordinate_1: string), (location: string, coordinate_2: tuple, quadrant: string)):
+    if convert_coordinate(coordinate_1) == coordinate_2:
+        return True
+    else:
+        return False
+
+def create_record((treasure: string, coordinate_1: string), (location: string, coordinate_2: tuple, quadrant: string):
+    if convert_coordinate(coordinate_1) == coordinate_2:
+        return (treasure, coordinate_1, location, coordinate_2, quadrant)
+    else:
+        return "not a match"
+
+def clean_up(*args: tuple):
+    for arg in args:
+        print(arg[0], arg[2], arg[3], arg[4]+"\n")
